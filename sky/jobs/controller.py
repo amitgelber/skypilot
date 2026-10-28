@@ -4323,7 +4323,8 @@ class ControllerManager:
                     JOB_FINALIZE_DB_RETRY_BACKOFF_BASE_SECONDS,
                     max_backoff=jobs_constants.
                     JOB_FINALIZE_DB_RETRY_BACKOFF_CAP_SECONDS,
-                    deadline=deadline)
+                    deadline=deadline,
+                    include_pool_timeout=True)
 
             try:
                 fallback_dag = (controller.loaded_dag

@@ -694,7 +694,8 @@ async def _retry_session(operation):
         async with sql_async.AsyncSession(engine) as session:
             return await operation(session)
 
-    return await db_retries.with_db_retries_async(_do)
+    return await db_retries.with_db_retries_async(_do,
+                                                  include_pool_timeout=True)
 
 
 async def _describe_task_transition_failure(session: sql_async.AsyncSession,
@@ -752,7 +753,7 @@ async def _retry_task_status_update(
             logger.error(message)
             raise exceptions.ManagedJobStatusError(message)
 
-    await db_retries.with_db_retries_async(_op)
+    await db_retries.with_db_retries_async(_op, include_pool_timeout=True)
 
 
 async def _retry_schedule_state_update(
@@ -784,7 +785,7 @@ async def _retry_schedule_state_update(
                     return
             assert False, (job_id, count)
 
-    await db_retries.with_db_retries_async(_op)
+    await db_retries.with_db_retries_async(_op, include_pool_timeout=True)
 
 
 # job_duration is the time a job actually runs (including the
